@@ -1,0 +1,66 @@
+---
+- name: install_zabbix_server
+  hosts: host
+  become: yes
+  become_method: sudo
+  remote_user: admin
+  tasks:
+    - name: apt update
+      ansible.builtin.shell:
+        sudo apt update
+
+    - name: Install Zabbix repository
+      ansible.builtin.shell: |
+        wget https://repo.zabbix.com/zabbix/7.2/release/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.2+ubuntu24.04_all.deb &&
+        dpkg -i zabbix-release_latest_7.2+ubuntu24.04_all.deb &&
+        apt update
+
+    - name: install dependencies
+      apt:
+        name: "{{item}}"
+        state: present
+        update_cache: yes
+      loop:
+        - postgresql 
+        - zabbix-server-pgsql
+        - zabbix-frontend-php
+        - php8.3-pgsql
+        - zabbix-nginx-conf
+        - zabbix-sql-scripts
+
+    - name:  Create initial database
+      ansible.builtin.shell: |
+        su - postgres -c 'psql --command "CREATE USER zabbix WITH PASSWORD '\'123\'';"' &&
+        su - postgres -c 'psql --command "CREATE DATABASE zabbix OWNER zabbix;"' &&
+        zcat /usr/share/zabbix/sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix
+
+    - name:  Configure the database for Zabbix server and PHP for Zabbix frontend
+      ansible.builtin.shell: |
+        sed -i 's/# DBPassword=/DBPassword=123/g' /etc/zabbix/zabbix_server.conf &&
+        sed -i 's/#        listen          8080;/        listen          80;/g' /etc/zabbix/nginx.conf &&
+        sed -i 's/#        server_name     example.com;/        server_name     158.160.35.89;/g' /etc/zabbix/nginx.conf
+
+    - name: Start Zabbix server and agent processes
+      ansible.builtin.shell: |
+        systemctl restart zabbix-server nginx php8.3-fpm &&
+        systemctl enable zabbix-server nginx php8.3-fpm
+
+
+
+
+
+#docker run --name zabbix-server-docker --link some-zabbix-server:zabbix-server -e DB_SERVER_HOST="84.201.134.239" -e POSTGRES_USER="zabbix" -e POSTGRES_PASSWORD="111" -e ZBX_SERVER_HOST="84.201.134.239" -e PHP_TZ="(UTC+03:00) Europe/Moscow" -d zabbix/zabbix-web-nginx-pgsql:ubuntu-latest
+
+#docker run --name zabbix-server-docker -e DB_SERVER_HOST="some-postgres-server" -e POSTGRES_USER="zabbix" -e POSTGRES_PASSWORD="123" --init -d zabbix/zabbix-server-pgsql:ubuntu-latest
+
+#su - postgres -c 'psql --command "CREATE USER zabbix WITH PASSWORD '\'123\'';"'
+#su - postgres -c 'psql --command "CREATE DATABASE zabbix OWNER zabbix;"'
+
+#sed -i 's/# DBPassword=/DBPassword=123/g' /etc/zabbix/zabbix_server.conf
+
+#sed -i 's/#        listen          80;/        listen          8080;/g' /etc/zabbix/nginx.conf
+#sed -i 's/#        server_name     example.com;/        server_name     84.201.131.183;/g' /etc/zabbix/nginx.conf
+
+#docker run --name zabbix-server-docker -e DB_SERVER_HOST="84.201.130.109" -e POSTGRES_USER="zabbix" -e POSTGRES_PASSWORD="123" --init -d zabbix/zabbix-server-pgsql:ubuntu-latest
+
+#docker run --name zabbix-nginx-docker -e ZBX_SERVER_HOST="zabbix-server-docker" -e DB_SERVER_HOST="84.201.130.109" -e POSTGRES_USER="zabbix" -e POSTGRES_PASSWORD="123" -e POSTGRES_DB="zabbix" -e PHP_TZ="(UTC+03:00) Europe/Moscow" -d zabbix/zabbix-web-nginx-pgsql:ubuntu-latest
