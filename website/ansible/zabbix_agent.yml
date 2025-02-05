@@ -1,0 +1,27 @@
+---
+- name: ZabbixAgent
+  hosts: host
+  become: yes
+  become_method: sudo
+  remote_user: user
+  tasks:
+    - name: apt update
+      ansible.builtin.shell:
+        sudo apt update
+
+    - name: Install Zabbix repository
+      ansible.builtin.shell: |
+        wget https://repo.zabbix.com/zabbix/7.2/release/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.2+ubuntu24.04_all.deb &&
+        dpkg -i zabbix-release_latest_7.2+ubuntu24.04_all.deb &&
+        apt update
+
+    - name: Install Zabbix agent
+      ansible.builtin.apt:
+        name: zabbix-agent
+        state: latest
+
+    - name: Start Zabbix agent and agent processes
+      ansible.builtin.shell: |
+        systemctl restart zabbix-agent
+        systemctl enable zabbix-agent
+        
