@@ -1,9 +1,9 @@
 ---
-- name: install_elasticsearch
+- name: filebeat
   hosts: host
   become: yes
   become_method: sudo
-  remote_user: admin
+  remote_user: user
   tasks:
     - name: apt update
       ansible.builtin.shell:
@@ -15,23 +15,24 @@
         echo "deb [trusted=yes] https://mirror.yandex.ru/mirrors/elastic/7/ stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list &&
         apt update
 
-    - name: install elasticsearch
+    - name: install filebeat
       apt:
         name: "{{item}}"
         state: present
         update_cache: yes
       loop:
-        - gnupg
-        - apt-transport-https 
-        - elasticsearch
+        - filebeat
 
-    - name:  Start elasticsearch
+    - name: filebeat enable
       ansible.builtin.shell: |
         systemctl daemon-reload &&
-        systemctl enable elasticsearch.service &&
-        systemctl start elasticsearch.service
+        systemctl enable filebeat.service &&
+        systemctl start filebeat.service
 
-    - name:  Configure elasticsearch
+    - name:  Configure 
       ansible.builtin.shell: |
-        sed -i 's/#network.host: 192.168.0.1/network.host: 0.0.0.0/g' /etc/elasticsearch/elasticsearch.yml &&
-        systemctl restart elasticsearch.service
+        filebeat modules list &&
+        filebeat modules enable system nginx &&
+        sed -i 's/    - \x2Fvar\x2Flog\x2F\*.log/    - \x2Fvar\x2Flog\x2Fnginx\x2Faccess.log\n    - \x2Fvar\x2Flog\x2Fnginx\x2Ferroe.log/g' /etc/filebeat/filebeat.yml &&
+        sed -i 's/localhost:9200/158.160.41.107:9200/g' /etc/filebeat/filebeat.yml &&
+        systemctl restart filebeat

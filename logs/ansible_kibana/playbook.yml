@@ -1,5 +1,5 @@
 ---
-- name: install_elasticsearch
+- name: install_kibana
   hosts: host
   become: yes
   become_method: sudo
@@ -15,23 +15,23 @@
         echo "deb [trusted=yes] https://mirror.yandex.ru/mirrors/elastic/7/ stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list &&
         apt update
 
-    - name: install elasticsearch
+    - name: install kibana
       apt:
         name: "{{item}}"
         state: present
         update_cache: yes
       loop:
-        - gnupg
-        - apt-transport-https 
-        - elasticsearch
+        - kibana
 
-    - name:  Start elasticsearch
+    - name:  Start kibana
       ansible.builtin.shell: |
         systemctl daemon-reload &&
-        systemctl enable elasticsearch.service &&
-        systemctl start elasticsearch.service
-
-    - name:  Configure elasticsearch
+        systemctl enable kibana.service &&
+        systemctl start kibana.service
+        
+    - name:  Configure kibana
       ansible.builtin.shell: |
-        sed -i 's/#network.host: 192.168.0.1/network.host: 0.0.0.0/g' /etc/elasticsearch/elasticsearch.yml &&
-        systemctl restart elasticsearch.service
+        sed -i 's/#server.port: 5601/server.port: 5601/g' /etc/kibana/kibana.yml &&
+        sed -i 's/#server.host: "localhost"/server.host: "0.0.0.0"/g' /etc/kibana/kibana.yml &&
+        sed -i 's/elasticsearch.hosts: ["http://localhost:9200"]/elasticsearch.hosts: ["http://158.160.41.107:9200"]/g' /etc/kibana/kibana.yml &&
+        sed -i 's/#logging.dest: stdout/logging.dest: \x2Fvar\x2Flog\x2Fkibana\x2Fkibana.log/g' /etc/kibana/kibana.yml &&
