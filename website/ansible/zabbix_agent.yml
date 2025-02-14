@@ -20,6 +20,10 @@
         name: zabbix-agent
         state: latest
 
+    - name:  Configure the database for Zabbix server and PHP for Zabbix frontend
+      ansible.builtin.shell: |
+        sed -i 's/Server=127.0.0.1/Server=158.160.35.89/g' /etc/zabbix/zabbix_agentd.conf
+
     - name: Start Zabbix agent and agent processes
       ansible.builtin.shell: |
         systemctl restart zabbix-agent
