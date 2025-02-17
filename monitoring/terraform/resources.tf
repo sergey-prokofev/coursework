@@ -31,7 +31,7 @@ resource "yandex_compute_instance" "zabbix-server" {
     }
 
     network_interface {
-      subnet_id = "e9bkrdr2afi4mjq4lr3h"
+      subnet_id = "e2liialuje3ht7g9vvgu"
       nat = true
       nat_ip_address = yandex_vpc_address.network-zabbix-server.external_ipv4_address[0].address
     }
