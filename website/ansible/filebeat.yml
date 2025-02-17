@@ -35,4 +35,14 @@
         filebeat modules enable system nginx &&
         sed -i 's/    - \x2Fvar\x2Flog\x2F\*.log/    - \x2Fvar\x2Flog\x2Fnginx\x2Faccess.log\n    - \x2Fvar\x2Flog\x2Fnginx\x2Ferroe.log/g' /etc/filebeat/filebeat.yml &&
         sed -i 's/localhost:9200/158.160.41.107:9200/g' /etc/filebeat/filebeat.yml &&
+        sed -i 's/  #host: "localhost:5601"/  host: "158.160.91.159:5601"/g' /etc/filebeat/filebeat.yml &&
         systemctl restart filebeat
+
+
+#sed -i 's/    #var.paths:/    #var.paths: ["\x2Fvar\x2Flog\x2Fnginx\x2Faccess.log"]/g' /etc/filebeat/modules.d/nginx.yml &&
+#sed -i 's/    #var.paths:/    #var.paths: ["\x2Fvar\x2Flog\x2Fnginx\x2Ferror.log"]/g' /etc/filebeat/modules.d/nginx.yml &&
+
+
+#<<<<необходимо добавить следующие строчки в файле /etc/filebeat/modules.d/nginx.yml:>>>>
+#var.paths: ["/var/log/nginx/access.log"]
+#var.paths: ["/var/log/nginx/error.log"]
