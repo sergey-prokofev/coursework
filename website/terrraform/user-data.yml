@@ -6,6 +6,7 @@ datasource:
 ssh_pwauth: no
 users:
 - name: admin
+  passwd: 111
   sudo: ALL=(ALL) NOPASSWD:ALL
   shell: /bin/bash
   ssh_authorized_keys:

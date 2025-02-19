@@ -10,7 +10,7 @@ resource "yandex_compute_disk" "disk-kibana" {
     name = "disk-kibana"
     type = "network-hdd"
     size = 12
-    zone = "ru-central1-b"
+    zone = "ru-central1-a"
     image_id = "fd8rg0kng2d1kg23eu3r"
 }
 
@@ -24,7 +24,7 @@ resource "yandex_vpc_address" "network-elasticsearch" {
 resource "yandex_vpc_address" "network-kibana" {
     name = "network-kibana"
     external_ipv4_address {
-      zone_id = "ru-central1-b"
+      zone_id = "ru-central1-a"
     }
 }
 
@@ -43,7 +43,7 @@ resource "yandex_compute_instance" "elasticsearch" {
     }
 
     network_interface {
-      subnet_id = "e9bcg66goaevgfarg5i2"
+      subnet_id = "e9bfanc2ijpkgqjq2m8v"
       nat = true
       nat_ip_address = yandex_vpc_address.network-elasticsearch.external_ipv4_address[0].address
     }
@@ -59,7 +59,7 @@ resource "yandex_compute_instance" "elasticsearch" {
 
 resource "yandex_compute_instance" "kibana" {
     name = "kibana"
-    zone = "ru-central1-b"
+    zone = "ru-central1-a"
 
     resources {
       core_fraction = 20 # Гарантированная доля vCPU
@@ -72,7 +72,7 @@ resource "yandex_compute_instance" "kibana" {
     }
 
     network_interface {
-      subnet_id = "e2llllo8ncvrm373k2vi"
+      subnet_id = "e9bqj3op0aq4dn7o1u6l"
       nat = true
       nat_ip_address = yandex_vpc_address.network-kibana.external_ipv4_address[0].address
     }

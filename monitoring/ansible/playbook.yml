@@ -38,7 +38,7 @@
       ansible.builtin.shell: |
         sed -i 's/# DBPassword=/DBPassword=123/g' /etc/zabbix/zabbix_server.conf &&
         sed -i 's/#        listen          8080;/        listen          80;/g' /etc/zabbix/nginx.conf &&
-        sed -i 's/#        server_name     example.com;/        server_name     158.160.35.89;/g' /etc/zabbix/nginx.conf
+        sed -i 's/#        server_name     example.com;/        server_name     89.169.135.78;/g' /etc/zabbix/nginx.conf
 
     - name: Start Zabbix server and agent processes
       ansible.builtin.shell: |

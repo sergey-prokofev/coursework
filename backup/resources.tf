@@ -12,11 +12,10 @@ resource "yandex_compute_snapshot_schedule" "snapshot" {
 
   retention_period = "168h"
 
-  disk_ids = ["epdmd2ss9um7ucmn392u", 
-             "fhm2c9psr2vq1vnkf350",
-             "fhmdpd0g1vc5at5afjvv",
-             "fhmip5bon9i95hjljtm6",
-             "fhmiprusjuibn1vm94lj",
-             "fhmskhrgpm2ds4k2p2pg",
-             "fhmt45q99aveqjep4e29"]
+  disk_ids = ["epdtrlfakai1t6898458", 
+             "fhm0l1mlgrs94eereujp",
+             "fhmadbd40b2trgvidcv5",
+             "fhmf7qfalm3gatc5jjdj",
+             "fhmm0fvdkqlb429cuc1a",
+             "fhmiuosfv3i3ruuh11gv"]
 }

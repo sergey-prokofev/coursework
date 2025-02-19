@@ -12,7 +12,7 @@
     - name: Install elasticsearch repository
       ansible.builtin.shell: |
         wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch &&
-        echo "deb [trusted=yes] https://mirror.yandex.ru/mirrors/elastic/7/ stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list &&
+        echo "deb [trusted=yes] https://mirror.yandex.ru/mirrors/elastic/7/ stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list &&
         apt update
 
     - name: install filebeat
@@ -34,13 +34,14 @@
         filebeat modules list &&
         filebeat modules enable system nginx &&
         sed -i 's/    - \x2Fvar\x2Flog\x2F\*.log/    - \x2Fvar\x2Flog\x2Fnginx\x2Faccess.log\n    - \x2Fvar\x2Flog\x2Fnginx\x2Ferroe.log/g' /etc/filebeat/filebeat.yml &&
-        sed -i 's/localhost:9200/158.160.41.107:9200/g' /etc/filebeat/filebeat.yml &&
-        sed -i 's/  #host: "localhost:5601"/  host: "158.160.91.159:5601"/g' /etc/filebeat/filebeat.yml &&
+        sed -i 's/localhost:9200/51.250.80.122:9200/g' /etc/filebeat/filebeat.yml &&
+        sed -i 's/  #host: "localhost:5601"/  host: "89.169.142.45:5601"/g' /etc/filebeat/filebeat.yml &&
+        sed -i '0,/    #var.paths:/s/    #var.paths:/    var.paths: ["\x2Fvar\x2Flog\x2Fnginx\x2Faccess.log"]/' /etc/filebeat/modules.d/nginx.yml &&
+        sed -i '0,/    #var.paths:/s/    #var.paths:/    var.paths: ["\x2Fvar\x2Flog\x2Fnginx\x2Ferror.log"]/' /etc/filebeat/modules.d/nginx.yml &&
         systemctl restart filebeat
 
 
-#sed -i 's/    #var.paths:/    #var.paths: ["\x2Fvar\x2Flog\x2Fnginx\x2Faccess.log"]/g' /etc/filebeat/modules.d/nginx.yml &&
-#sed -i 's/    #var.paths:/    #var.paths: ["\x2Fvar\x2Flog\x2Fnginx\x2Ferror.log"]/g' /etc/filebeat/modules.d/nginx.yml &&
+
 
 
 #<<<<необходимо добавить следующие строчки в файле /etc/filebeat/modules.d/nginx.yml:>>>>

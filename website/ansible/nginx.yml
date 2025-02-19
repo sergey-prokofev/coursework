@@ -1,0 +1,27 @@
+---
+- name: nginx
+  hosts: host
+  become: yes
+  become_method: sudo
+  remote_user: user
+  tasks:
+    - name: install mginx
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+        
+    - service:
+        name: nginx
+        state: started
+
+    - name: Copy website files to the server's document root
+      copy:
+        src: ./index.html
+        dest: /var/www/html/index.html
+        mode: preserve
+
+    - name: Copy website files to the server's document root
+      copy:
+        src: ./images/Unt.jpeg
+        dest: /var/www/html/Unt.jpeg
+        mode: preserve

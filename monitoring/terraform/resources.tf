@@ -2,19 +2,13 @@ resource "yandex_compute_disk" "disk-zabbix-server" {
     name = "disk-zabbix-server"
     size = 20
     image_id = "fd870suu28d40fqp8srr"
-    labels = {
-      "project" = "zabbix-server"
-    }
-  
-
 }
 
 resource "yandex_vpc_address" "network-zabbix-server" {
-    name = "network"
+    name = "zabbix-server"
     external_ipv4_address {
       zone_id = "ru-central1-a"
     }
-  
 }
 
 resource "yandex_compute_instance" "zabbix-server" {
@@ -31,7 +25,7 @@ resource "yandex_compute_instance" "zabbix-server" {
     }
 
     network_interface {
-      subnet_id = "e2liialuje3ht7g9vvgu"
+      subnet_id = "e9bqj3op0aq4dn7o1u6l"
       nat = true
       nat_ip_address = yandex_vpc_address.network-zabbix-server.external_ipv4_address[0].address
     }

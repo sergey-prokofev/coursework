@@ -12,7 +12,7 @@
     - name: Install elasticsearch repository
       ansible.builtin.shell: |
         wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch &&
-        echo "deb [trusted=yes] https://mirror.yandex.ru/mirrors/elastic/7/ stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list &&
+        echo "deb [trusted=yes] https://mirror.yandex.ru/mirrors/elastic/7/ stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list &&
         apt update
 
     - name: install kibana
@@ -33,6 +33,6 @@
       ansible.builtin.shell: |
         sed -i 's/#server.port: 5601/server.port: 5601/g' /etc/kibana/kibana.yml &&
         sed -i 's/#server.host: "localhost"/server.host: "0.0.0.0"/g' /etc/kibana/kibana.yml &&
-        sed -i 's/elasticsearch.hosts: ["http://localhost:9200"]/elasticsearch.hosts: ["http://158.160.41.107:9200"]/g' /etc/kibana/kibana.yml &&
+        sed -i 's/#elasticsearch.hosts: \["http:\x2F\x2Flocalhost:9200"\]/elasticsearch.hosts: ["http:\x2F\x2F51.250.80.122:9200"]/g' /etc/kibana/kibana.yml &&
         sed -i 's/#logging.dest: stdout/logging.dest: "\x2Fvar\x2Flog\x2Fkibana\x2Fkibana.log"/g' /etc/kibana/kibana.yml &&
         systemctl restart kibana.service

@@ -1,34 +1,28 @@
-resource "yandex_compute_disk" "disk1" {
-    name = "disk1"
+resource "yandex_compute_disk" "web1" {
+    name = "web1"
     type = "network-hdd"
     size = 12
     zone = "ru-central1-a"
     image_id = "fd8rg0kng2d1kg23eu3r"
-    labels = {
-      "project" = "web-server"
-    }
 }
 
-resource "yandex_compute_disk" "disk2" {
-    name = "disk2"
+resource "yandex_compute_disk" "web2" {
+    name = "web2"
     type = "network-hdd"
     size = 12
     zone = "ru-central1-b"
     image_id = "fd8rg0kng2d1kg23eu3r"
-    labels = {
-      "project" = "web-server"
-    }
 }
 
-resource "yandex_vpc_address" "network1" {
-    name = "network1"
+resource "yandex_vpc_address" "web1" {
+    name = "web1"
     external_ipv4_address {
       zone_id = "ru-central1-a"
     }
 }
 
-resource "yandex_vpc_address" "network2" {
-    name = "network2"
+resource "yandex_vpc_address" "web2" {
+    name = "web2"
     external_ipv4_address {
       zone_id = "ru-central1-b"
     }
@@ -45,13 +39,13 @@ resource "yandex_compute_instance" "webserver1" {
     }
 
     boot_disk {
-      disk_id = yandex_compute_disk.disk1.id
+      disk_id = yandex_compute_disk.web1.id
     }
 
     network_interface {
-      subnet_id = "e9bcg66goaevgfarg5i2"
+      subnet_id = "e9bfanc2ijpkgqjq2m8v"
       nat = true
-      nat_ip_address = yandex_vpc_address.network1.external_ipv4_address[0].address
+      nat_ip_address = yandex_vpc_address.web1.external_ipv4_address[0].address
     }
 
     metadata = {
@@ -74,13 +68,13 @@ resource "yandex_compute_instance" "webserver2" {
     }
 
     boot_disk {
-      disk_id = yandex_compute_disk.disk2.id
+      disk_id = yandex_compute_disk.web2.id
     }
 
     network_interface {
-      subnet_id = "e2llllo8ncvrm373k2vi"
+      subnet_id = "e2lk0vs7ouc582cjp4mn"
       nat = true
-      nat_ip_address = yandex_vpc_address.network2.external_ipv4_address[0].address
+      nat_ip_address = yandex_vpc_address.web2.external_ipv4_address[0].address
     }
 
     metadata = {
@@ -106,7 +100,7 @@ resource "yandex_alb_target_group" "web-servers-target-group" {
   }
 }
 
-
+#########################################################################################
 resource "yandex_alb_backend_group" "web-servers-backend-group" {
   name = "backend-group"
  
@@ -114,7 +108,7 @@ resource "yandex_alb_backend_group" "web-servers-backend-group" {
     name = "web-servers"
     weight = 1
     port = 80
-    target_group_ids = ["ds78sgn7ba21rvuhqnmm"]
+    target_group_ids = ["ds7dfvkokco5f7b58ajr"]
     load_balancing_config {
       panic_threshold = 90
     }
@@ -133,10 +127,9 @@ resource "yandex_alb_backend_group" "web-servers-backend-group" {
 
 resource "yandex_alb_http_router" "web-servers-http-router" {
   name = "http-router"
-  labels = {
-    "project" = "web-server"
-  }
 }
+
+##################################################################
 
 resource "yandex_alb_virtual_host" "web-servers-virtual-host" {
   name = "virtual-host"
@@ -145,7 +138,7 @@ resource "yandex_alb_virtual_host" "web-servers-virtual-host" {
     name = "web-route"
     http_route {
       http_route_action {
-        backend_group_id = "ds73mm285dath65jcrfn"
+        backend_group_id = "ds7c569vfbfioopf737p"
         timeout = "60s"
       }
     }
@@ -155,21 +148,13 @@ resource "yandex_alb_virtual_host" "web-servers-virtual-host" {
 
 resource "yandex_alb_load_balancer" "web-servers-balancer" {
   name = "web-servers-balancer"
-  network_id = "enpoahtfd0g4ajc8eo54"
-  security_group_ids = ["enpsi2lpf1v2b25m4tf7"]
+  network_id = "enpr6634742j94h241d0"
+  security_group_ids = ["enpgjct6n8ri5vgb7tab"]
 
   allocation_policy {
     location {
-      zone_id   = "ru-central1-b"
-      subnet_id = "e2llllo8ncvrm373k2vi" 
-    }
-    location {
       zone_id   = "ru-central1-a"
-      subnet_id = "e9bcg66goaevgfarg5i2" 
-    }
-    location {
-      zone_id   = "ru-central1-d"
-      subnet_id = "fl81s0bosmfeai523knj" 
+      subnet_id = "e9bqj3op0aq4dn7o1u6l" 
     }
   }
 
