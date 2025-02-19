@@ -5,7 +5,7 @@ datasource:
   strict_id: false
 ssh_pwauth: no
 users:
-- name: zabbix
+- name: admin
   passwd: 111
   sudo: ALL=(ALL) NOPASSWD:ALL
   shell: /bin/bash

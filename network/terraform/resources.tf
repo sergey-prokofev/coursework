@@ -3,7 +3,7 @@ resource "yandex_vpc_network" "coursework" {
 }
 
 resource "yandex_vpc_subnet" "public-subnet" {
-  name           = "external-subnet"
+  name           = "public-subnet"
   zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.coursework.id
   v4_cidr_blocks = ["10.110.0.0/24"]
