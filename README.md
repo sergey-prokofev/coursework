@@ -64,7 +64,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 Все ресурсы инфраструктуры разворачиваются с помощью файлов *.tf и ansible-playbook- *.yml
 
 
-![Задание](https://github.com/sergey-prokofev/coursework/tree/main/img/1.PNG)
-![Задание](https://github.com/sergey-prokofev/coursework/tree/main/img/2.PNG)
-![Задание](https://github.com/sergey-prokofev/coursework/tree/main/img/3.PNG)
-![Задание](https://github.com/sergey-prokofev/coursework/tree/main/img/4.PNG)
+![Задание](https://github.com/sergey-prokofev/coursework/blob/main/img/1.PNG)
+![Задание](https://github.com/sergey-prokofev/coursework/blob/main/img/2.PNG)
+![Задание](https://github.com/sergey-prokofev/coursework/blob/main/img/3.PNG)
+![Задание](https://github.com/sergey-prokofev/coursework/blob/main/img/4.PNG)
