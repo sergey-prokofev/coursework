@@ -45,3 +45,26 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 ### Резервное копирование
 Создайте snapshot дисков всех ВМ. Ограничьте время жизни snaphot в неделю. Сами snaphot настройте на ежедневное копирование.
+
+---
+
+## Выполнение работы
+
+Вся инфраструктура разбита на семь частей (каталогов) в соответствием с вышеописанной задачей: 
+1. backup - резервное копирование основных данных.
+2. bastion_host - бастион хост.
+3. logs - сбор логов.
+4. monitoring - мониторинг.
+5. network - VPC, приватные подсети и публичные подсети.
+6. security_groups - настройка Security Groups соответствующих сервисов.
+7. website - инфраструктура для сайтов.
+
+В каждом разделе имеются файлы для разворачивания инфраструктуры с помощью Terraform, где необходимо Ansible
+
+Все ресурсы инфраструктуры разворачиваются с помощью файлов *.tf и ansible-playbook- *.yml
+
+
+![Задание](https://github.com/sergey-prokofev/coursework/tree/main/img/1.PNG)
+![Задание](https://github.com/sergey-prokofev/coursework/tree/main/img/2.PNG)
+![Задание](https://github.com/sergey-prokofev/coursework/tree/main/img/3.PNG)
+![Задание](https://github.com/sergey-prokofev/coursework/tree/main/img/4.PNG)
