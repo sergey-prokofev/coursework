@@ -40,10 +40,3 @@
         sed -i '0,/    #var.paths:/s/    #var.paths:/    var.paths: ["\x2Fvar\x2Flog\x2Fnginx\x2Ferror.log"]/' /etc/filebeat/modules.d/nginx.yml &&
         systemctl restart filebeat
 
-
-
-
-
-#<<<<необходимо добавить следующие строчки в файле /etc/filebeat/modules.d/nginx.yml:>>>>
-#var.paths: ["/var/log/nginx/access.log"]
-#var.paths: ["/var/log/nginx/error.log"]

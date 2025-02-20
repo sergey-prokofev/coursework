@@ -1,0 +1,13 @@
+[host]
+89.169.135.78 ansible_user=admin ansible_passwd=111
+
+#Для подключения через bastion host раскомментируйте следующие строки:
+
+#[proxy]
+#158.160.56.94 ansible_user=admin ansible_passwd=111
+
+#[nodes]
+#10.110.0.10 ansible_user=admin ansible_passwd=111
+
+#[nodes:vars]
+#ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p admin@158.160.56.94"'
